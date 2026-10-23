@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 200 30% 98%;
+    --foreground: 211 39% 19%;
+    --card: 0 0% 100%;
+    --card-foreground: 211 39% 19%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 211 39% 19%;
+    --primary: 194 83% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 194 64% 95%;
+    --secondary-foreground: 194 83% 32%;
+    --muted: 200 23% 95%;
+    --muted-foreground: 210 13% 53%;
+    --accent: 194 64% 95%;
+    --accent-foreground: 194 83% 32%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 205 25% 91%;
+    --input: 205 25% 91%;
+    --ring: 194 83% 42%;
+    --radius: 1rem;
+  }
+}
+
+/* Keep the optional web preview as crisp as the native app. */
+html, body, #root { min-height: 100%; }
+body { background: #e8f0f3; }

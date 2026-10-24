@@ -3,23 +3,57 @@
     "name": "dctoria",
     "slug": "dctoria",
     "version": "1.0.0",
+    "scheme": "dctoria",
+    "description": "Your Kurdish healthcare companion. Find doctors, hospitals, clinics, and laboratories.",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "backgroundColor": "#f7fafb",
+    "primaryColor": "#159ac4",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.trxstudio.dctoria",
+      "usesAppleSignIn": true
     },
     "android": {
+      "package": "com.trxstudio.dctoria",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#159ac4",
         "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro",
+      "name": "dctoria",
+      "themeColor": "#159ac4"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-apple-authentication",
+      [
+        "expo-localization",
+        {
+          "supportsRTL": true,
+          "supportedLocales": [
+            "ckb",
+            "en"
+          ]
+        }
+      ],
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#159ac4",
+          "image": "./assets/android-icon-foreground.png",
+          "imageWidth": 160
+        }
+      ],
+      "expo-web-browser"
+    ]
   }
 }

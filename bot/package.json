@@ -1,0 +1,9 @@
+{
+  "name": "dctoria-admin-bot",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": "24.x" },
+  "scripts": { "test": "node --test tests/*.test.mjs", "check": "node --check api/telegram.js && node --check lib/bot.mjs", "webhook": "node scripts/register-webhook.mjs" },
+  "dependencies": { "@supabase/supabase-js": "^2.118.0" }
+}

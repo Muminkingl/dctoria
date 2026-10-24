@@ -32,6 +32,7 @@ yarn-error.*
 
 # local env files
 .env*.local
+.vercel/
 
 # typescript
 *.tsbuildinfo
@@ -39,3 +40,8 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Local store credentials and generated verification artifacts
+credentials/
+google-play-service-account*.json
+output/

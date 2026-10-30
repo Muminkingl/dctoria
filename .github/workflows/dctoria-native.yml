@@ -19,7 +19,7 @@ jobs:
     env:
       CI: '1'
       DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer
-      DCTORIA_SOURCE_DIR: ${{ runner.temp }}/dctoria-source
+      DCTORIA_SOURCE_DIR: /tmp/dctoria-source
       DCTORIA_BUILD_KIND: ${{ matrix.kind }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262

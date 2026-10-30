@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        kind: ["simulator"]
+        kind: ["production","simulator"]
     concurrency:
       group: dctoria-native-release-${{ matrix.kind }}
       cancel-in-progress: false

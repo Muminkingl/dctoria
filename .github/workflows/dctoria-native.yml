@@ -4,9 +4,6 @@ on:
     branches: ['codex/testflight-20261030141044341']
 permissions:
   contents: read
-concurrency:
-  group: dctoria-native-release
-  cancel-in-progress: false
 jobs:
   native:
     if: github.actor == 'Muminkingl' && github.repository == 'Muminkingl/dctoria'
@@ -16,6 +13,9 @@ jobs:
       fail-fast: false
       matrix:
         kind: ["production"]
+    concurrency:
+      group: dctoria-native-release-${{ matrix.kind }}
+      cancel-in-progress: false
     env:
       CI: '1'
       DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer

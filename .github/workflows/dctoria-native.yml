@@ -1,0 +1,67 @@
+name: Dctoria native release preparation
+on:
+  push:
+    branches: ['codex/testflight-20261030141044341']
+permissions:
+  contents: read
+concurrency:
+  group: dctoria-native-release
+  cancel-in-progress: false
+jobs:
+  native:
+    if: github.actor == 'Muminkingl' && github.repository == 'Muminkingl/dctoria'
+    runs-on: xcode-27
+    timeout-minutes: 85
+    strategy:
+      fail-fast: false
+      matrix:
+        kind: [production, simulator]
+    env:
+      CI: '1'
+      DEVELOPER_DIR: /Applications/Xcode_27.0.app/Contents/Developer
+      DCTORIA_SOURCE_DIR: ${{ runner.temp }}/dctoria-source
+      DCTORIA_BUILD_KIND: ${{ matrix.kind }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+      - name: Decrypt current source snapshot
+        env:
+          DCTORIA_SOURCE_KEY: ${{ secrets.DCTORIA_SOURCE_CODEX_TESTFLIGHT_20261030141044341 }}
+        run: node ci/artifact-crypto.mjs decrypt
+      - name: Configure public app environment
+        env:
+          DCTORIA_PUBLIC_CONFIG: ${{ secrets.DCTORIA_PUBLIC_CODEX_TESTFLIGHT_20261030141044341 }}
+        run: |
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';
+          const config = JSON.parse(process.env.DCTORIA_PUBLIC_CONFIG);
+          for (const name of ['EXPO_PUBLIC_SUPABASE_URL','EXPO_PUBLIC_SUPABASE_ANON_KEY']) {
+            if (!config[name] || /[\r\n]/.test(config[name])) throw Error('Invalid public configuration');
+            fs.appendFileSync(process.env.GITHUB_ENV, name+'='+config[name]+'\n');
+          }
+          JS
+      - name: Build and verify native app
+        env:
+          DCTORIA_SIGNING_BUNDLE: ${{ matrix.kind == 'production' && secrets.DCTORIA_SIGNING_CODEX_TESTFLIGHT_20261030141044341 || '' }}
+        run: bash "$DCTORIA_SOURCE_DIR/scripts/ci/build-ios.sh"
+      - name: Encrypt output before uploading artifacts
+        if: always()
+        env:
+          DCTORIA_SOURCE_KEY: ${{ secrets.DCTORIA_SOURCE_CODEX_TESTFLIGHT_20261030141044341 }}
+        run: node ci/artifact-crypto.mjs encrypt-results
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: dctoria-${{ matrix.kind }}-encrypted
+          path: ${{ runner.temp }}/dctoria-results.enc
+          retention-days: 3
+          if-no-files-found: error
+      - name: Remove temporary signing credentials
+        if: always()
+        run: |
+          security delete-keychain "$RUNNER_TEMP/dctoria-signing.keychain-db" 2>/dev/null || true
+          rm -rf "$RUNNER_TEMP/dctoria-signing"
